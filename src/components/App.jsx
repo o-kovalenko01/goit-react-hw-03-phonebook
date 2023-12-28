@@ -16,6 +16,22 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    // Завантаження контактів з локального сховища після монтажу компонента
+    const savedContacts = localStorage.getItem('contacts');
+
+    if (savedContacts) {
+      this.setState({ contacts: JSON.parse(savedContacts) });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // Збереження контактів у локальне сховище при оновленні стану
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   onSubmit = ({ name, number }) => {
     const hasContact = this.state.contacts.some(
       contact => contact.name.toLowerCase() === name.toLowerCase()
